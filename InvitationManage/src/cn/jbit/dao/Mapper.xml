@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.dao.Mapper">
+		<!-- 分页查询| 查询所有帖子/模糊查询 -->
+		<select id="selInvitation" resultType="Invitation" >
+			SELECT * FROM invitation
+				<if test="null!=title and ''!=title">
+				where  title like CONCAT('%',#{title},'%') 
+				</if>
+  				 ORDER BY createdate DESC LIMIT #{currentPageNo},#{pageSize}
+		</select>
+		
+		<select id="selReply_detail" resultType="Reply_detail">
+			SELECT * FROM reply_detail WHERE invid=#{id}
+		</select>
+		
+		<insert id="addReply_detail" parameterType="Reply_detail">
+			insert into Reply_detail
+		(invid,content,author,createdate)
+			values
+		(#{invid},#{content},#{author},#{createdate})
+		</insert>
+		
+		<delete id="delInvitation" parameterType="int">
+			delete from invitation where id=#{id}
+		</delete>
+		
+		<delete id="delReply_detail" parameterType="int">
+			
+			delete from reply_detail where invid=#{id}
+		</delete>
+		
+		<select id="count" resultType="int">
+		select count(*) from Invitation
+			<if test="null!=title and ''!=title">
+				where  title like CONCAT('%',#{title},'%') 
+			</if>
+		</select>
+</mapper>
